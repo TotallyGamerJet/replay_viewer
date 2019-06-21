@@ -211,3 +211,5 @@ func (_ UUID) Decode(r io.Reader) (interface{}, error) {
 func (d UUID) Encode(w io.Writer) error {
 	return nil //utils.WriteFloat64(w, float64(d))
 }
+
+type Identifier String

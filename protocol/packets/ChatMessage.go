@@ -5,9 +5,11 @@ import (
 )
 
 type ChatMessage struct {
-	Chat     string //chat.TextComponent
+	Chat     codecs.String //chat.TextComponent
 	Position codecs.Byte
 }
+
+func (_ ChatMessage) Name() string { return "ChatMessage" }
 
 func (_ ChatMessage) ID() int { return 0x0F }
 

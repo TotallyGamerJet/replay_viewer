@@ -13,9 +13,6 @@ func main() {
 	metaData := loadMetaData("output")
 	fmt.Println(metaData)
 	readRecording("./output/recording.tmcpr")
-	for i, p := range packets.PacketList {
-		fmt.Println(i, p.ID())
-	}
 }
 
 func readRecording(filename string) {
@@ -24,7 +21,7 @@ func readRecording(filename string) {
 		panic(err)
 	}
 	defer file.Close()
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 12; i++ {
 		t, err := packets.ReadInt(file)
 		if err != nil {
 			panic(err)
@@ -38,7 +35,7 @@ func readRecording(filename string) {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("#%d t:%d l:%d id:%d\n", i, t, l, pkt.ID)
+		fmt.Printf("#%d t:%d l:%d id:%d ", i, t, l, pkt.ID)
 
 		readPkt(pkt)
 	}
@@ -53,5 +50,6 @@ func readPkt(pkt *packets.Packet) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("n:%s\n", holder.Name())
 	//fmt.Println(holder)
 }

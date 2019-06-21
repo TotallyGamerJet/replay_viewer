@@ -11,6 +11,8 @@ type BlockBreakAnimation struct {
 	destroyStage codecs.Byte
 }
 
+func (_ BlockBreakAnimation) Name() string { return "BlockBreakAnimation" }
+
 func (_ BlockBreakAnimation) ID() int { return 0x08 }
 
 func (p BlockBreakAnimation) ReadPacketData(pkt *Packet) (holder Holder, err error) {

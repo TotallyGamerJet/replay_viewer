@@ -23,32 +23,20 @@ var (
 	UnExpectedPacket    = errors.New("recieved an unexpected packet")
 )
 
-/*
-type Direction int
-
-const (
-	Serverbound Direction = iota
-	Clientbound
-)*/
-/*
-type State uint8
-
-const (
-	Handshake State = iota
-	Status
-	Login
-	Play
-)*/
-
 var PacketList = map[int]Holder{
-	//0x00: PlayKeepAlive{},
-	//0x01: PlayJoinGame{},
 	0x02: ChatMessage{},
-	//0x05: PlaySpawnPosition{},
-	//0x07: PlayPositionAndLook{},
-	0x0D: SpawnObject{},
-	0x18: EntityHeadLook{},
-	0x25: BlockBreakAnimation{},
+	0x0D: ServerDifficulty{},
+	0x11: DeclareCommands{}, //TODO: Finish
+	0x1B: EntityStatus{},
+	0x18: PluginMessage{},
+	0x20: KeepAlive{},
+	0x25: JoinGame{},
+	0x31: PlayerAbilities{},
+	0x35: PlayerPositionAndLook{}, //HAS Data example
+	0x3F: PlayerChangeHeldItem{},
+	0x4D: SpawnPosition{},
+	0x5A: DeclareRecipe{},
+	0x5B: DeclareTags{}, //TODO: Finish
 }
 
 func ReadInt(reader io.Reader) (val int, err error) {
@@ -94,8 +82,9 @@ func ReadPacket(reader io.Reader, length int) (pkt *Packet, err error) {
 	}, nil
 }
 
-func (p *Packet) readString() (str string, err error) {
-	str, err = utils.ReadString(&p.Data)
+func (p *Packet) readString() (str codecs.String, err error) {
+	s, err := utils.ReadString(&p.Data)
+	str = codecs.String(s)
 	return
 }
 
@@ -163,5 +152,38 @@ func (p *Packet) readShort() (val codecs.Short, err error) {
 		return
 	}
 	val = codecs.Short(i)
+	return
+}
+
+func (p *Packet) readUByte() (val codecs.UnsignedByte, err error) {
+	i, err := utils.ReadUint8(&p.Data)
+	if err != nil {
+		return
+	}
+	val = codecs.UnsignedByte(i)
+	return
+}
+
+func (p *Packet) readBool() (val codecs.Boolean, err error) {
+	i, err := utils.ReadBool(&p.Data)
+	if err != nil {
+		return
+	}
+	val = codecs.Boolean(i)
+	return
+}
+
+func (p *Packet) readFloat() (val codecs.Float, err error) {
+	i, err := utils.ReadFloat32(&p.Data)
+	if err != nil {
+		return
+	}
+	val = codecs.Float(i)
+	return
+}
+
+func (p *Packet) readIdentifier() (val codecs.Identifier, err error) {
+	str, err := p.readString()
+	val = codecs.Identifier(str)
 	return
 }
