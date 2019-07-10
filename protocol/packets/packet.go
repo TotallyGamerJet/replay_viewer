@@ -24,16 +24,22 @@ var (
 )
 
 var PacketList = map[int]Holder{
-	0x02: ChatMessage{},
+	0x02: ChatMessage{}, // Not Actaully Correct should be Spawn Global Entity
+	0x08: BlockBreakAnimation{},
 	0x0D: ServerDifficulty{},
 	0x11: DeclareCommands{}, //TODO: Finish
 	0x1B: EntityStatus{},
-	0x18: PluginMessage{},
+	0x18: PluginMessage{}, //Ignored
 	0x20: KeepAlive{},
+	0x21: ChunkData{},
+	0x24: UpdateLight{},
 	0x25: JoinGame{},
 	0x31: PlayerAbilities{},
+	0x33: PlayerInfo{},            //TODO: Finish error checking
 	0x35: PlayerPositionAndLook{}, //HAS Data example
+	0x36: UnlockRecipes{},
 	0x3F: PlayerChangeHeldItem{},
+	0x40: UpdateViewPosition{},
 	0x4D: SpawnPosition{},
 	0x5A: DeclareRecipe{},
 	0x5B: DeclareTags{}, //TODO: Finish
@@ -116,14 +122,13 @@ func (p *Packet) readBlockPos() (val protocol.BlockPos, err error) {
 }
 
 func (p *Packet) readUUID() (val codecs.UUID, err error) {
-	var uuid codecs.UUID
-	data, err := uuid.Decode(&p.Data)
+	i, err := utils.ReadUUID(&p.Data)
 	if err != nil {
 		return
 	}
-	val, ok := data.(codecs.UUID)
+	val, ok := i.(codecs.UUID)
 	if !ok {
-		err = fmt.Errorf("failed to decode uuid")
+		err = fmt.Errorf("failed to decode UUID")
 	}
 	return
 }
@@ -184,6 +189,18 @@ func (p *Packet) readFloat() (val codecs.Float, err error) {
 
 func (p *Packet) readIdentifier() (val codecs.Identifier, err error) {
 	str, err := p.readString()
+	if err != nil {
+		return
+	}
 	val = codecs.Identifier(str)
+	return
+}
+
+func (p *Packet) readByteArray() (val codecs.ByteArray, err error) {
+	i, err := utils.ReadByteArray(&p.Data)
+	if err != nil {
+		return
+	}
+	val = codecs.ByteArray(i)
 	return
 }

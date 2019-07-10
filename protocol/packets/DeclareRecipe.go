@@ -11,8 +11,10 @@ type DeclareRecipe struct {
 	}
 }
 
+//Name returns the name of the packet as a string
 func (_ DeclareRecipe) Name() string { return "ServerDeclareRecipesPacket" }
 
+//ID returns the id in hex of the packet
 func (_ DeclareRecipe) ID() int { return 0x5A }
 
 func (p DeclareRecipe) ReadPacketData(pkt *Packet) (holder Holder, err error) {

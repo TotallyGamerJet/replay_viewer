@@ -7,8 +7,10 @@ type EntityStatus struct {
 	status   codecs.Byte
 }
 
+//Name returns the name of the packet as a string
 func (_ EntityStatus) Name() string { return "ServerEntityStatusPacket" }
 
+//ID returns the id in hex of the packet
 func (_ EntityStatus) ID() int { return 0x1B }
 
 func (p EntityStatus) ReadPacketData(pkt *Packet) (holder Holder, err error) {

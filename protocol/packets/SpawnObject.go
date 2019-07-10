@@ -13,8 +13,10 @@ type SpawnObject struct {
 	velX, velY, velZ codecs.Short
 }
 
+//Name returns the name of the packet as a string
 func (_ SpawnObject) Name() string { return "SpawnObject" }
 
+//ID returns the id in hex of the packet
 func (_ SpawnObject) ID() int { return 0x00 }
 
 func (s SpawnObject) ReadPacketData(pkt *Packet) (holder Holder, err error) {

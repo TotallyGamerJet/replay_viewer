@@ -13,8 +13,10 @@ type JoinGame struct {
 	Debug        codecs.Boolean
 }
 
+//Name returns the name of the packet as a string
 func (_ JoinGame) Name() string { return "ServerJoinGamePacket" }
 
+//ID returns the id in hex of the packet
 func (_ JoinGame) ID() int { return 0x25 }
 
 func (p JoinGame) ReadPacketData(pkt *Packet) (holder Holder, err error) {

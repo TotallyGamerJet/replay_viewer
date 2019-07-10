@@ -145,3 +145,32 @@ func ReadFloat64(reader io.Reader) (val float64, err error) {
 	val = math.Float64frombits(ival)
 	return
 }
+
+func ReadUUID(reader io.Reader) (val interface{}, err error) {
+	m, err := ReadInt64(reader)
+	if err != nil {
+		return nil, err
+	}
+	l, err := ReadInt64(reader)
+	val = struct {
+		f, l int64
+	}{
+		m, l,
+	}
+	return
+}
+
+func ReadByteArray(reader io.Reader) (val []byte, err error) {
+	l, err := ReadVarInt(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	val = make([]byte, int(l))
+	_, err = io.ReadFull(reader, val)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}

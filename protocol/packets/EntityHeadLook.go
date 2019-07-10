@@ -7,8 +7,10 @@ type EntityHeadLook struct {
 	headYaw  codecs.Byte
 }
 
+//Name returns the name of the packet as a string
 func (_ EntityHeadLook) Name() string { return "*EntityHeadLook" }
 
+//ID returns the id in hex of the packet
 func (_ EntityHeadLook) ID() int { return 0x39 }
 
 func (e EntityHeadLook) ReadPacketData(pkt *Packet) (holder Holder, err error) {

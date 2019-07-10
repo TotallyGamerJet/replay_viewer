@@ -10,8 +10,10 @@ type PlayerAbilities struct {
 	fov      codecs.Float
 }
 
+//Name returns the name of the packet as a string
 func (_ PlayerAbilities) Name() string { return "ServerPlayerAbilitiesPacket" }
 
+//ID returns the id in hex of the packet
 func (_ PlayerAbilities) ID() int { return 0x18 }
 
 func (p PlayerAbilities) ReadPacketData(pkt *Packet) (holder Holder, err error) {

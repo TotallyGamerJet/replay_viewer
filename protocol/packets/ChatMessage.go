@@ -9,8 +9,10 @@ type ChatMessage struct {
 	Position codecs.Byte
 }
 
+//Name returns the name of the packet as a string
 func (_ ChatMessage) Name() string { return "ChatMessage" }
 
+//ID returns the id in hex of the packet
 func (_ ChatMessage) ID() int { return 0x0F }
 
 func (p ChatMessage) ReadPacketData(pkt *Packet) (holder Holder, err error) {

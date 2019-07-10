@@ -21,7 +21,7 @@ func readRecording(filename string) {
 		panic(err)
 	}
 	defer file.Close()
-	for i := 0; i < 12; i++ {
+	for i := 0; i < 18; i++ {
 		t, err := packets.ReadInt(file)
 		if err != nil {
 			panic(err)

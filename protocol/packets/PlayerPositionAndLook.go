@@ -12,8 +12,10 @@ type PlayerPositionAndLook struct {
 	Data  codecs.VarInt
 }
 
-func (_ PlayerPositionAndLook) Name() string { return "*PlayerPositionAndLook" }
+//Name returns the name of the packet as a string
+func (_ PlayerPositionAndLook) Name() string { return "ServerPlayerPositionRotationPacket" }
 
+//ID returns the id in hex of the packet
 func (_ PlayerPositionAndLook) ID() int { return 0x35 }
 
 func (p PlayerPositionAndLook) ReadPacketData(pkt *Packet) (holder Holder, err error) {
