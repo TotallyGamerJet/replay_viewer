@@ -2,13 +2,41 @@ package utils
 
 import (
 	"archive/zip"
-	"io"
-	"os"
-	"path/filepath"
+	"bytes"
+	"fmt"
+	"io/ioutil"
+	"log"
 )
 
+//GetZippedFile takes the zippedFile and searchs for the target file inside. It will either return the found file as a bytes.Buffer or an error
+func GetZippedFile(zippedFile, target string) (*bytes.Buffer, error) {
+	// Open a zip archive for reading.
+	r, err := zip.OpenReader(zippedFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer r.Close()
+
+	for _, f := range r.File {
+		//fmt.Println("Found: ", f.Name)
+		if f.Name == target {
+			rc, err := f.Open()
+			if err != nil {
+				log.Fatal(err)
+			}
+			data, err := ioutil.ReadAll(rc)
+			if err != nil {
+				log.Fatal(err)
+			}
+			rc.Close()
+			return bytes.NewBuffer(data), nil
+		}
+	}
+	return nil, fmt.Errorf("Failed to locate file %s in zipped file %s", target, zippedFile)
+}
+
 //Unzip unzips the givin file 'src' into 'dest'
-func Unzip(src, dest string) error {
+/*func Unzip(src, dest string) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		return err
@@ -66,3 +94,4 @@ func Unzip(src, dest string) error {
 
 	return nil
 }
+*/

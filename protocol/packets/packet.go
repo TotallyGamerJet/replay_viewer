@@ -27,6 +27,7 @@ var PacketList = map[int]Holder{
 	0x02: ChatMessage{}, // Not Actaully Correct should be Spawn Global Entity
 	0x08: BlockBreakAnimation{},
 	0x0D: ServerDifficulty{},
+	0x0E: ChatMessage{},
 	0x11: DeclareCommands{}, //TODO: Finish
 	0x1B: EntityStatus{},
 	0x18: PluginMessage{}, //Ignored

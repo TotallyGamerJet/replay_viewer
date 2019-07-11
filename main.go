@@ -3,24 +3,22 @@ package main
 import (
 	"fmt"
 	"mclib-go/protocol"
-	"os"
 	"replay_viewer/protocol/packets"
 	"replay_viewer/utils"
 )
 
 func main() {
-	utils.Unzip("test_recording.mcpr", "./output")
-	metaData := loadMetaData("output")
+	metaData := loadMetaData("test_recording.mcpr")
 	fmt.Println(metaData)
-	readRecording("./output/recording.tmcpr")
+	readRecording("test_recording.mcpr")
 }
 
-func readRecording(filename string) {
-	file, err := os.Open(filename)
+func readRecording(mcprFile string) {
+	file, err := utils.GetZippedFile(mcprFile, "recording.tmcpr")
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
+	//file := bytes.NewBuffer(data)
 	for i := 0; i < 18; i++ {
 		t, err := packets.ReadInt(file)
 		if err != nil {

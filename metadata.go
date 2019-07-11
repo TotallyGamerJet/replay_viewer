@@ -2,32 +2,19 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"replay_viewer/utils"
 	"strconv"
 	"time"
 )
 
-func loadMetaData(foldername string) MetaData {
-	file, err := ioutil.ReadFile(foldername + "/metaData.json")
-	if err != nil {
-		panic("file doesn't exist")
-	}
-	/* FAILED ATTEMPT to read files inside the .mcpr
-	file, err := utils.GetFile("test_recording.mcpr", "metaData.json")
+func loadMetaData(mcprFile string) MetaData {
+	data, err := utils.GetZippedFile(mcprFile, "metaData.json")
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
-
-	var readData []byte
-	n, err := file.Read(readData)
-	if err != nil || n == 0 {
-		panic(err)
-	}
-	fmt.Println(readData)*/
 
 	metaData := MetaData{}
-	err = json.Unmarshal(file, &metaData)
+	err = json.Unmarshal(data.Bytes(), &metaData)
 	if err != nil {
 		panic("metadata format incorrect?")
 	}
